@@ -13,6 +13,17 @@ export const insertDocument = new ValidatedMethod({
   },
 });
 
+if (Meteor.isServer) {
+  import { rateLimit2 } from '../../modules/server/rate-limit2.js'
+  rateLimit2({
+    methods: [
+      insertDocument,
+    ],
+    limit: 5,
+    timeRange: 1000,
+  })
+}
+
 export const updateDocument = new ValidatedMethod({
   name: 'documents.update',
   validate: new SimpleSchema({
